@@ -1,12 +1,15 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'signup.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
+import 'auth.dart';
 
 
 class LogInClass extends StatefulWidget {
-  LogInClass({Key key}) : super(key: key);
+  final BaseAuth authentication ;
+  LogInClass ({@required this.authentication});
 
   _LogInClassState createState() => _LogInClassState();
 }
@@ -17,8 +20,8 @@ class _LogInClassState extends State<LogInClass> {
   final password = TextEditingController();
   String _email, _password;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _signIn = GoogleSignIn();
+
+
 
 
 
@@ -141,7 +144,9 @@ SizedBox(height: 20,),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: RaisedButton(
-                        onPressed: SignInWithEmailAndPassword,
+                        onPressed:SignInWithEmailAndPassword,
+
+
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -173,8 +178,10 @@ SizedBox(height: 20,),
                                 ),
                               ),
                               InkWell(
-                                onTap: () {
-                                  googleSignin(context);
+                                onTap: () async {
+                                  String user = await widget.authentication.signInWithGoogle();
+   Navigator.push(context, MaterialPageRoute(builder: (context)=>
+       HomePageClass(currentuser: widget.authentication.getCurrentUser().toString(),)));
                                 },
                                 child: Image.asset(
                                   'datafolder/google.png',
@@ -220,32 +227,6 @@ SizedBox(height: 20,),
       }
     }
   }
-
-
-
-
-
-
-  Future < FirebaseUser > googleSignin(BuildContext context) async {
-    FirebaseUser currentUser;
-    try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken, );
-      final AuthResult user = await _auth.signInWithCredential(credential);
-      currentUser = await _auth.currentUser();
-      assert(user.user.uid == currentUser.uid);
-      print(currentUser);
-      print("User Name : ${currentUser.displayName}");
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePageClass(currentuser: user.user.uid,)));
-    } catch (e) {
-
-      return currentUser;
-    }
-  }
-
-
 
 
 }

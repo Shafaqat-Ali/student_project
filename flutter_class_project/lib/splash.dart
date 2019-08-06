@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'auth.dart';
 import 'login.dart';
 //import 'sign_up.dart';
 
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigationPage() {
     Navigator.pushReplacement(
     context,
-    MaterialPageRoute(builder: (context) => LogInClass()));
+    MaterialPageRoute(builder: (context) => LogInClass(authentication: Auth(),)));
   }
 
   @override
