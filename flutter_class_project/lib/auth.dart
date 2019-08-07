@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -16,10 +17,12 @@ class Auth implements BaseAuth {
 
 
 
+
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user;
   }
+
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
@@ -42,6 +45,8 @@ class Auth implements BaseAuth {
       final AuthResult user = await _auth.signInWithCredential(credential);
       currentUser = await _auth.currentUser();
       assert(user.user.uid == currentUser.uid);
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool("logedIn", true);
       print(currentUser);
       print("User Name : ${currentUser.displayName}");
 

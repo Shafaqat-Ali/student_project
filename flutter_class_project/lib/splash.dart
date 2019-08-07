@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'auth.dart';
 import 'login.dart';
-//import 'sign_up.dart';
+import 'home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 
@@ -11,6 +13,9 @@ import 'login.dart';
 
 
 class SplashScreen extends StatefulWidget {
+  final BaseAuth authcheck ;
+  SplashScreen ({@required this.authcheck});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -21,10 +26,24 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(_duration, navigationPage);
   }
 
-  void navigationPage() {
-    Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => LogInClass(authentication: Auth(),)));
+  Future navigationPage() async {
+SharedPreferences pref = await SharedPreferences.getInstance();
+final loged = pref.getBool('logedIn') ;
+
+
+    if(loged == true){
+
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePageClass(logout: Auth(),)));
+    }else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) =>LogInClass(authentication: Auth(),) ));
+
+    }
+
+
   }
 
   @override

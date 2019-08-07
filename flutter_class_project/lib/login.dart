@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'signup.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth.dart';
 
 
@@ -19,6 +19,8 @@ class _LogInClassState extends State<LogInClass> {
   final email = TextEditingController();
   final password = TextEditingController();
   String _email, _password;
+  int counter = 0;
+  bool logedin = false;
 
 
 
@@ -83,7 +85,7 @@ class _LogInClassState extends State<LogInClass> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignUpClass()),
+                                  builder: (context) => SignUpClass(signupauthentication: Auth(),)),
                             );
                           },
                           child: Text(
@@ -181,7 +183,7 @@ SizedBox(height: 20,),
                                 onTap: () async {
                                   String user = await widget.authentication.signInWithGoogle();
    Navigator.push(context, MaterialPageRoute(builder: (context)=>
-       HomePageClass(currentuser: widget.authentication.getCurrentUser().toString(),)));
+       HomePageClass(logout: Auth(),)));
                                 },
                                 child: Image.asset(
                                   'datafolder/google.png',
@@ -221,7 +223,10 @@ SizedBox(height: 20,),
       formState.save();
       try {
         AuthResult user = await  FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePageClass(currentuser: user.user.uid,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePageClass(logout: Auth(),)));
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setBool("logedIn", true);
+
       } catch (e) {
         print(e.massege);
       }

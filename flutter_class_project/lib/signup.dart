@@ -5,6 +5,12 @@ import 'auth.dart';
 import 'login.dart';
 import 'home_page.dart';
 
+
+
+
+
+
+
 class SignUpClass extends StatefulWidget {
   final BaseAuth signupauthentication ;
   SignUpClass ({@required this.signupauthentication});
@@ -247,7 +253,9 @@ class _SignUpClassState extends State<SignUpClass> {
                                     onTap: () async {
                                       String user = await widget.signupauthentication.signInWithGoogle();
                                       Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                          HomePageClass(currentuser: widget.signupauthentication.getCurrentUser().toString(),)));
+                                          HomePageClass(logout: Auth(),
+                                          // currentuser: widget.signupauthentication.getCurrentUser().toString(),
+                                          )));
 
                                     },
                                     child: Image.asset(
