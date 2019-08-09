@@ -223,7 +223,7 @@ SizedBox(height: 20,),
       formState.save();
       try {
         AuthResult user = await  FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePageClass(logout: Auth(),)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePageClass(logout: Auth(),)));
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setBool("logedIn", true);
 
