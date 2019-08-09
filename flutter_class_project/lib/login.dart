@@ -182,7 +182,7 @@ SizedBox(height: 20,),
                               InkWell(
                                 onTap: () async {
                                   String user = await widget.authentication.signInWithGoogle();
-   Navigator.push(context, MaterialPageRoute(builder: (context)=>
+   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
        HomePageClass(logout: Auth(),)));
                                 },
                                 child: Image.asset(
@@ -226,6 +226,7 @@ SizedBox(height: 20,),
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePageClass(logout: Auth(),)));
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setBool("logedIn", true);
+        return user;
 
       } catch (e) {
         print(e.massege);
